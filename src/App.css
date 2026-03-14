@@ -1,0 +1,824 @@
+/* ══════════════════════════════════════
+   SCREEN SYSTEM
+   React의 조건부 렌더링으로 활성 화면을 제어하므로
+   .screen은 항상 display: flex 상태입니다.
+══════════════════════════════════════ */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  animation: screen-fade-in 0.2s ease;
+}
+@keyframes screen-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+   SCREEN 01 – 01_main  (dark TV home)
+══════════════════════════════════════ */
+.screen--main {
+  background: #0b0b12;
+  color: #fff;
+}
+
+.side-nav {
+  width: 56px;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  gap: 20px;
+  background: #0b0b12;
+  position: relative;
+  z-index: 10;
+}
+
+.side-nav--kids {
+  background: #FFD75E;
+}
+
+.btn-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.bp-purple { background: #7b5ea7; }
+.bp-yellow { background: #c8953a; }
+
+.nav-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.nav-icon:hover { opacity: 1; }
+.nav-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tv-main {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.tv-main--kids {
+  background: #FFD75E;
+}
+
+.hero {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 42%;
+}
+.hero-img {
+  border-radius: 12px;
+  object-fit: cover;
+  height: 100%;
+}
+.hero-img:first-child { flex: 0 0 53%; }
+.hero-img:last-child  { flex: 1; }
+
+.category-row {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.cat-btn {
+  flex: 1;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+.cat-teal   { background: #3ec9bf; }
+.cat-salmon { background: #c97060; }
+.cat-purple { background: #a080d8; }
+.cat-blue   { background: #5090d8; }
+.cat-gray   { background: #707080; }
+
+.app-row {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  align-items: center;
+}
+.app-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.app-icon:hover { opacity: 0.85; }
+
+.content-grid {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  min-height: 0;
+}
+.content-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.content-label {
+  font-size: 13px;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content-label--kids { color: #333; }
+.content-thumb {
+  flex: 1;
+  border-radius: 10px;
+  object-fit: cover;
+  width: 100%;
+  min-height: 0;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.overlay.open,
+.overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Side panel */
+.side-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 296px;
+  height: 100%;
+  background: rgba(62, 54, 110, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 20px 24px 76px;
+}
+.side-panel.open,
+.side-panel--open { transform: translateX(0); }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+.panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.panel-more {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 4px;
+  display: flex;
+}
+.panel-more svg {
+  width: 18px;
+  height: 18px;
+}
+
+.account-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.account-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.account-item:hover { background: rgba(255, 255, 255, 0.08); }
+.account-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.av-purple { background: #7b5ea7; }
+.av-yellow { background: #c8953a; }
+.av-add {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+}
+.account-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+}
+.account-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vdivider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  padding: 2px;
+}
+.logout-btn:hover { color: #fff; }
+.logout-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ══════════════════════════════════════
+   KIDS MAIN – yellow bg version
+══════════════════════════════════════ */
+.screen--kids-main {
+  background: #FFD75E;
+  color: #1a1a1a;
+}
+
+/* ══════════════════════════════════════
+   SCREEN MODIFIER CLASSES
+══════════════════════════════════════ */
+.screen--dark {
+  background: #0b0b12;
+  color: #fff;
+}
+
+.screen--center {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen--kids {
+  background: #FFD75E;
+  color: #1a1a1a;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 02 – 프로필 유형 선택하기 (black)
+══════════════════════════════════════ */
+.screen--profile-type {
+  background: #0b0b12;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.pt-title {
+  font-size: 44px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.pt-sub {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 52px;
+  text-align: center;
+}
+.pt-btn {
+  display: block;
+  width: 400px;
+  padding: 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: opacity 0.15s;
+}
+.pt-btn:hover { opacity: 0.85; }
+.pt-btn-blue   { background: #4A6BBF; color: #fff; }
+.pt-btn-yellow { background: #FFB800; color: #1a1a1a; }
+/* BEM variant names used by ProfileTypeScreen */
+.pt-btn--blue   { background: #4A6BBF; color: #fff; }
+.pt-btn--yellow { background: #FFB800; color: #1a1a1a; }
+
+/* pt-content wrapper */
+.pt-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ══════════════════════════════════════
+   YELLOW KIDS FLOW SCREENS
+══════════════════════════════════════ */
+.kids-screen {
+  background: #FFD75E;
+  color: #1a1a1a;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* position: fixed; inset: 0 은 .screen 클래스에서 상속됨 */
+}
+
+/* Top nav row (back ← and × buttons) */
+.kids-topnav {
+  position: absolute;
+  top: 32px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ktn-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  transition: background 0.15s;
+}
+.ktn-btn:hover { background: rgba(0, 0, 0, 0.15); }
+.ktn-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.ktn-spacer { width: 46px; }
+
+/* Inner content area */
+.kc {
+  text-align: center;
+  max-width: 960px;
+  width: 100%;
+  padding: 0 60px;
+}
+.kc-title {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.25;
+}
+.kc-sub {
+  font-size: 17px;
+  color: #555;
+  margin-bottom: 44px;
+}
+
+/* Card grid */
+.card-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.kcard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  min-width: 180px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  border: 3px solid transparent;
+}
+.kcard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+.kcard--selected {
+  border-color: #4A6BBF;
+  box-shadow: 0 0 0 3px rgba(74, 107, 191, 0.25);
+}
+.kcard-label {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.kcard-sub {
+  font-size: 13px;
+  color: #999;
+  margin-top: -8px;
+}
+.kcard-rec {
+  background: #FFB800;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-top: 2px;
+}
+
+/* Action buttons in kids screens */
+.k-btn {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 10px;
+  padding: 18px;
+  border-radius: 12px;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.k-btn:hover { opacity: 0.85; }
+.kb-blue  { background: #4A6BBF; color: #fff; }
+.kb-white { background: #fff; color: #1a1a1a; }
+/* BEM variant names */
+.k-btn--blue  { background: #4A6BBF; color: #fff; }
+.k-btn--white { background: #fff; color: #1a1a1a; }
+
+/* Check content wrapper (ConnectedScreen / CreationCompleteScreen) */
+.check-content {
+  text-align: center;
+}
+.checkmark-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 28px auto 0;
+}
+.checkmark-circle svg {
+  width: 56px;
+  height: 56px;
+}
+
+/* Webcam wrap glowing modifier */
+.webcam-wrap--glowing .webcam-glow-ring {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Checkmark */
+.checkmark-wrap {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 28px auto 0;
+}
+.checkmark-wrap svg {
+  width: 56px;
+  height: 56px;
+}
+
+/* Login screen layout */
+.login-cols {
+  display: flex;
+  gap: 80px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+.login-col { text-align: center; }
+.login-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #1a1a1a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.login-col-title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 200px;
+}
+.qr-box {
+  width: 150px;
+  height: 150px;
+  background: #fff;
+  border-radius: 8px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.code-text {
+  font-size: 46px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #1a1a1a;
+}
+
+/* Webcam */
+.webcam-img {
+  width: 200px;
+  height: 110px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 28px auto;
+  flex-shrink: 0;
+}
+.webcam-img::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  border: 3px solid #555;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.webcam-img::after {
+  content: '';
+  width: 55%;
+  height: 28%;
+  background: #444;
+  border-radius: 0 0 8px 8px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.red-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e53030;
+  position: absolute;
+  top: 24px;
+  right: 60px;
+}
+
+/* Webcam component */
+.webcam-wrap {
+  width: 200px;
+  height: 130px;
+  margin: 28px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.webcam-glow-ring {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 215, 94, 0) 68%);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+.webcam-body {
+  width: 200px;
+  height: 110px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.webcam-lens {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #3a3a3a;
+  border: 3px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.webcam-lens-inner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1a1a1a;
+}
+.webcam-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e53030;
+  position: absolute;
+  top: 24px;
+  right: 20px;
+}
+.webcam-base {
+  width: 55%;
+  height: 28%;
+  background: #444;
+  border-radius: 0 0 8px 8px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Webcam glow (connecting) */
+.glow-wrap {
+  width: 290px;
+  height: 290px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.glow-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 215, 94, 0) 68%);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.96); }
+  50%       { opacity: 1;    transform: scale(1.04); }
+}
+.connecting-label {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-top: 24px;
+}
+
+/* ThinQ screen */
+.thinq-row {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+}
+.phone-shell {
+  width: 200px;
+  height: 280px;
+  border: 3px solid #999;
+  border-radius: 28px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+}
+.phone-notch {
+  position: absolute;
+  top: 12px;
+  width: 60px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 4px;
+}
+.thinq-icon {
+  width: 80px;
+  height: 80px;
+  background: #e53030;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thinq-icon svg {
+  width: 44px;
+  height: 44px;
+}
+.thinq-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.qr-grid {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: repeating-conic-gradient(#222 0% 25%, #fff 0% 50%) 0 0 / 10px 10px;
+}
+.qr-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 12px;
+}
+
+/* Bear icon component */
+.bear-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Auto-progress indicator */
+.auto-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 0 2px 2px 0;
+  width: 0;
+}
+.auto-bar.running {
+  animation: bar-grow 3s linear forwards;
+}
+@keyframes bar-grow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
